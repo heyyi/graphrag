@@ -13,6 +13,7 @@ class LLMParametersInput(TypedDict):
 
     api_key: NotRequired[str | None]
     type: NotRequired[LLMType | str | None]
+    if_sync: NotRequired[bool | str | None]
     model: NotRequired[str | None]
     max_tokens: NotRequired[int | str | None]
     request_timeout: NotRequired[float | str | None]

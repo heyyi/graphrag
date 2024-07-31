@@ -106,6 +106,7 @@ class LLMType(str, Enum):
     # Chat Completion
     OpenAIChat = "openai_chat"
     AzureOpenAIChat = "azure_openai_chat"
+    OllamaChat = "ollama_chat"
 
     # Debug
     StaticResponse = "static_response"

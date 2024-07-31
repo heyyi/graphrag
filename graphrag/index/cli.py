@@ -277,6 +277,7 @@ def _read_config_parameters(root: str, config: str | None, reporter: ProgressRep
             import yaml
 
             data = yaml.safe_load(file.read().decode(encoding="utf-8", errors="strict"))
+            reporter.success(f"data {data}")
             return create_graphrag_config(data, root)
 
     if settings_json.exists():

@@ -5,12 +5,14 @@
 
 import logging
 from functools import cache
+import httpx
 
 from azure.identity import DefaultAzureCredential, get_bearer_token_provider
-from openai import AsyncAzureOpenAI, AsyncOpenAI
+from openai import AsyncAzureOpenAI, AsyncOpenAI, OpenAI
 
 from .openai_configuration import OpenAIConfiguration
 from .types import OpenAIClientTypes
+
 
 log = logging.getLogger(__name__)
 
@@ -53,8 +55,20 @@ def create_openai_client(
             timeout=configuration.request_timeout or 180.0,
             max_retries=0,
         )
-
-    log.info("Creating OpenAI client base_url=%s", configuration.api_base)
+        
+    if configuration.if_sync:
+        log.info("Creating sync OpenAI client base_url=%s", configuration.api_base)
+        return OpenAI(
+            api_key=configuration.api_key,
+            base_url=configuration.api_base,
+            organization=configuration.organization,
+            # Timeout/Retry Configuration - Use Tenacity for Retries, so disable them here
+            timeout=configuration.request_timeout or 180.0,
+            max_retries=0,
+            http_client=httpx.Client(verify=False),
+        )
+        
+    log.info("Creating async OpenAI client base_url=%s", configuration.api_base)
     return AsyncOpenAI(
         api_key=configuration.api_key,
         base_url=configuration.api_base,

@@ -148,6 +148,7 @@ class GraphExtractor:
     async def _process_document(
         self, text: str, prompt_variables: dict[str, str]
     ) -> str:
+        breakpoint()
         response = await self._llm(
             self._extraction_prompt,
             variables={

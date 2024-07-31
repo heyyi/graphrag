@@ -81,6 +81,7 @@ def create_graphrag_config(
         with reader.use(config.get("llm")):
             llm_type = reader.str(Fragment.type)
             llm_type = LLMType(llm_type) if llm_type else base.type
+            if_sync = reader.bool(Fragment.if_sync) or base.if_sync
             api_key = reader.str(Fragment.api_key) or base.api_key
             api_base = reader.str(Fragment.api_base) or base.api_base
             cognitive_services_endpoint = (
@@ -106,6 +107,7 @@ def create_graphrag_config(
             return LLMParameters(
                 api_key=api_key,
                 type=llm_type,
+                if_sync=if_sync,
                 api_base=api_base,
                 api_version=reader.str(Fragment.api_version) or base.api_version,
                 organization=reader.str("organization") or base.organization,
@@ -267,6 +269,7 @@ def create_graphrag_config(
                     or defs.LLM_TEMPERATURE,
                     top_p=reader.float(Fragment.top_p) or defs.LLM_TOP_P,
                     n=reader.int(Fragment.n) or defs.LLM_N,
+                    if_sync=reader.bool(Fragment.if_sync),
                     model_supports_json=reader.bool(Fragment.model_supports_json),
                     request_timeout=reader.float(Fragment.request_timeout)
                     or defs.LLM_REQUEST_TIMEOUT,
@@ -563,6 +566,7 @@ class Fragment(str, Enum):
     api_organization = "API_ORGANIZATION"
     api_proxy = "API_PROXY"
     async_mode = "ASYNC_MODE"
+    if_sync = "IF_SYNC"
     base_dir = "BASE_DIR"
     cognitive_services_endpoint = "COGNITIVE_SERVICES_ENDPOINT"
     concurrent_requests = "CONCURRENT_REQUESTS"

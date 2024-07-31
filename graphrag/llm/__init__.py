@@ -24,6 +24,13 @@ from .openai import (
     create_openai_completion_llm,
     create_openai_embedding_llm,
 )
+from .ollama import (
+    OllamaChatLLM,
+    OllamaClientTypes,
+    OllamaConfiguration,
+    create_ollama_chat_llm,
+    create_ollama_client,
+)
 from .types import (
     LLM,
     CompletionInput,

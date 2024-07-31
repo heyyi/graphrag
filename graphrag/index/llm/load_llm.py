@@ -17,8 +17,11 @@ from graphrag.llm import (
     LLMLimiter,
     MockCompletionLLM,
     OpenAIConfiguration,
+    OllamaConfiguration,
     create_openai_chat_llm,
+    create_ollama_chat_llm,
     create_openai_client,
+    create_ollama_client,
     create_openai_completion_llm,
     create_openai_embedding_llm,
     create_tpm_rpm_limiters,
@@ -144,6 +147,31 @@ def _load_openai_chat_llm(
     )
 
 
+def _load_ollama_chat_llm(
+    on_error: ErrorHandlerFn,
+    cache: LLMCache,
+    config: dict[str, Any],
+    azure=False,
+):
+    return _create_ollama_chat_llm(
+        OllamaConfiguration({
+            # Set default values
+            **_get_base_config(config),
+            "model": config.get("model", "gpt-4-turbo-preview"),
+            "deployment_name": config.get("deployment_name"),
+            "temperature": config.get("temperature", 0.0),
+            "frequency_penalty": config.get("frequency_penalty", 0),
+            "presence_penalty": config.get("presence_penalty", 0),
+            "top_p": config.get("top_p", 1),
+            "max_tokens": config.get("max_tokens"),
+            "n": config.get("n"),
+        }),
+        on_error,
+        cache,
+        azure,
+    )
+
+
 def _load_openai_embeddings_llm(
     on_error: ErrorHandlerFn,
     cache: LLMCache,
@@ -223,6 +251,10 @@ loaders = {
         "load": _load_openai_chat_llm,
         "chat": True,
     },
+    LLMType.OllamaChat: {
+        "load": _load_ollama_chat_llm,
+        "chat": True
+    },
     LLMType.AzureOpenAIChat: {
         "load": _load_azure_openai_chat_llm,
         "chat": True,
@@ -253,6 +285,20 @@ def _create_openai_chat_llm(
     limiter = _create_limiter(configuration)
     semaphore = _create_semaphore(configuration)
     return create_openai_chat_llm(
+        client, configuration, cache, limiter, semaphore, on_error=on_error
+    )
+    
+def _create_ollama_chat_llm(
+    configuration: OllamaConfiguration,
+    on_error: ErrorHandlerFn,
+    cache: LLMCache,
+    azure=False,
+) -> CompletionLLM:
+    """Create an ollM chat llm."""
+    client = create_ollama_client(configuration=configuration)
+    limiter = _create_limiter(configuration)
+    semaphore = _create_semaphore(configuration)
+    return create_ollama_chat_llm(
         client, configuration, cache, limiter, semaphore, on_error=on_error
     )
 
@@ -287,7 +333,7 @@ def _create_openai_embeddings_llm(
     )
 
 
-def _create_limiter(configuration: OpenAIConfiguration) -> LLMLimiter:
+def _create_limiter(configuration: OpenAIConfiguration | OllamaConfiguration) -> LLMLimiter:
     limit_name = configuration.model or configuration.deployment_name or "default"
     if limit_name not in _rate_limiters:
         tpm = configuration.tokens_per_minute
@@ -297,7 +343,7 @@ def _create_limiter(configuration: OpenAIConfiguration) -> LLMLimiter:
     return _rate_limiters[limit_name]
 
 
-def _create_semaphore(configuration: OpenAIConfiguration) -> asyncio.Semaphore | None:
+def _create_semaphore(configuration: OpenAIConfiguration | OllamaConfiguration) -> asyncio.Semaphore | None:
     limit_name = configuration.model or configuration.deployment_name or "default"
     concurrency = configuration.concurrent_requests
 

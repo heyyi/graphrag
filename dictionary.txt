@@ -1,146 +1,131 @@
-# Team
-Alonso
-
-# Pythonisms
-PYTHONPATH
-pycache
-nopython
-virtualenv
-Pythonisms
-pyproject
-ipynb
-pymodule
-virtualenv
-virtualenvs
-signum
-ospath
-msecs
-asdict
-isna
-getcwd
-fillna
-noqa
-
 # Azure
-abfs
-Hnsw
-odata
-
-# NLTK Terms
-chunker
-wordnet
-maxent
-punkt
-
-# Libraries
-Langchain
-networkx
-graspologic
-graphml
-dataframe
-dataframes
-nltk
-datashaper
-numba
-graphintelligence
-dotenv
-tiktoken
-pydantic
-faiss
-pyarrow
-pyaml
-Chakra
-poethepoet
-pyodbc
-lancedb
-httpx
-pymongo
-uvloop
-aiofiles
-asyncio
-numpy
-pypi
-nbformat
-semversioner
-
-# Library Methods
-iterrows
-rprint
-ndarray
-nprobe
-astype
-monkeypatches
-nlist
-ntotal
-quantizer
-arun
-tiktokens
-dtype
-linewidths
-asearch
-iloc
-itertuples
-isin
-nocache
-nbconvert
-
-# Verbs
-binarize
-prechunked
-openai
-genid
-umap
-concat
-unhot
-groupby
-retryer
-agenerate
-aembed
-dedupe
-
-# LLM Terms
-AOAI
-embedder
-llm
-llms
-
+# Broken Upstream
+# Charting
+# English
 # Galaxy-Brain Terms
-Unipartite
-idempotently
+# Libraries
+# Library Methods
+# LLM Terms
+# Microsoft
+# Misc
+# NLTK Terms
+# Prompt Inputs
+# Pythonisms
+# Resilience Team Terms
+# Team
+# TODO FIX IN DATASHAPER
+# Verbs
+abfs
+Abila
+ABILA
+aembed
+agenerate
+aiofiles
+Alonso
+AOAI
+Arrary
+arun
+Arxiv
+Asadi
+asdict
+asearch
+astype
+asyncio
+binarize
+Chakra
+chunker
+codebases
+columnwise
+concat
+confusors
 covariate
 covariates
-logit
-confusors
-
-# Charting
-plottable
-scatterplot
-
-# Resilience Team Terms
-megapipeline
-columnwise
-docstore
+dataframe
+dataframes
+datashaper
 datasource
+dedupe
 devcontainers
-codebases
-
-# Microsoft
-MSRC
-
-# Broken Upstream
-# TODO FIX IN DATASHAPER
-Arrary
-
-# Prompt Inputs
+docstore
+dotenv
+dtype
 dulce
-Asadi
-ABILA
-Abila
+embedder
+faiss
+fillna
+genid
+getcwd
+graphintelligence
+graphml
+graspologic
+groupby
+Hnsw
+httpx
+idempotently
+iloc
+ipynb
+isin
+isna
+iterrows
+itertuples
+lancedb
+Langchain
+linewidths
+llm
+llms
+logit
+maxent
+megapipeline
+monkeypatches
+msecs
+MSRC
+nbconvert
+nbformat
+ndarray
+networkx
+nlist
+nltk
+nocache
+nopython
+noqa
+nprobe
+ntotal
+numba
+numpy
+odata
+ollama
+openai
+ospath
+plottable
+poethepoet
 POKRALLY
-
-# English
+prechunked
+punkt
+pyaml
+pyarrow
+pycache
+pydantic
+pymodule
+pymongo
+pyodbc
+pypi
+pyproject
+Pythonisms
+PYTHONPATH
+quantizer
+retryer
+rprint
+scatterplot
+semversioner
+signum
 skippable
+tiktoken
+tiktokens
+umap
+unhot
+Unipartite
 upvote
-
-# Misc
-Arxiv
+uvloop
+virtualenv
+virtualenvs
+wordnet

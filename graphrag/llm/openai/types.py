@@ -6,6 +6,7 @@
 from openai import (
     AsyncAzureOpenAI,
     AsyncOpenAI,
+    OpenAI,
 )
 
-OpenAIClientTypes = AsyncOpenAI | AsyncAzureOpenAI
+OpenAIClientTypes = AsyncOpenAI | AsyncAzureOpenAI | OpenAI

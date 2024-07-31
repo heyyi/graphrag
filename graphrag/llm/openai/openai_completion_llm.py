@@ -7,6 +7,10 @@ import logging
 
 from typing_extensions import Unpack
 
+import asyncio
+from concurrent.futures import ThreadPoolExecutor
+executor = ThreadPoolExecutor()
+
 from graphrag.llm.base import BaseLLM
 from graphrag.llm.types import (
     CompletionInput,
@@ -36,8 +40,19 @@ class OpenAICompletionLLM(BaseLLM[CompletionInput, CompletionOutput]):
         input: CompletionInput,
         **kwargs: Unpack[LLMInput],
     ) -> CompletionOutput | None:
+
         args = get_completion_llm_args(
             kwargs.get("model_parameters"), self.configuration
         )
-        completion = self.client.completions.create(prompt=input, **args)
+        if self.configuration.if_sync:
+            loop = asyncio.get_event_loop()
+            completion = await loop.run_in_executor(
+                executor,
+                self.client.completions.create,
+                input,
+                **args,
+            )
+        
+        else:
+            completion = self.client.completions.create(prompt=input, **args)
         return completion.choices[0].text
