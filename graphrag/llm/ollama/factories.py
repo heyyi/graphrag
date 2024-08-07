@@ -10,6 +10,7 @@ from graphrag.llm.limiting import LLMLimiter
 from graphrag.llm.types import (
     LLM,
     CompletionLLM,
+    EmbeddingLLM,
     ErrorHandlerFn,
     LLMCache,
     LLMInvocationFn,
@@ -18,6 +19,7 @@ from graphrag.llm.types import (
 
 from .json_parsing_llm import JsonParsingLLM
 from .ollama_chat_llm import OllamaChatLLM
+from .ollama_embeddings_llm import OllamaEmbeddingsLLM
 from .ollama_configuration import OllamaConfiguration
 from .ollama_history_tracking_llm import OllamaHistoryTrackingLLM
 from .ollama_token_relacing_llm import OllamaTokenReplacingLLM
@@ -54,6 +56,29 @@ def create_ollama_chat_llm(
     result = OllamaTokenReplacingLLM(result)
     return JsonParsingLLM(result)
 
+
+def create_ollama_embedding_llm(
+    client: OllamaClientTypes,
+    config: OllamaConfiguration,
+    cache: LLMCache | None = None,
+    limiter: LLMLimiter | None = None, 
+    semaphore: asyncio.Semaphore | None = None,
+    on_invoke: LLMInvocationFn | None = None,
+    on_error: ErrorHandlerFn | None = None,
+    on_cache_hit: OnCacheActionFn | None = None,
+    on_cache_miss: OnCacheActionFn | None = None,
+) -> EmbeddingLLM:
+    """Create an Ollama embedding LLM."""
+    operation = "embedding"
+    result = OllamaEmbeddingsLLM(client, config)
+    result.on_error(on_error)
+    if limiter is not None or semaphore is not None:
+        result = _rate_limited(result, config, operation, limiter, semaphore, on_invoke)
+    if cache is not None:
+        result = _cached(result, config, operation, cache, on_cache_hit, on_cache_miss)
+    return result
+    
+    
 
 def _rate_limited(
     delegate: LLM,

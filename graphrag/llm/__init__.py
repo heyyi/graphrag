@@ -30,6 +30,7 @@ from .ollama import (
     OllamaConfiguration,
     create_ollama_chat_llm,
     create_ollama_client,
+    create_ollama_embedding_llm,
 )
 from .types import (
     LLM,

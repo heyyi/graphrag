@@ -19,8 +19,11 @@ from graphrag.model import (
 )
 from graphrag.query.context_builder.entity_extraction import EntityVectorStoreKey
 from graphrag.query.llm.oai.chat_openai import ChatOpenAI
+from graphrag.query.llm.ollama.chat_ollama import ChatOllama
 from graphrag.query.llm.oai.embedding import OpenAIEmbedding
+from graphrag.query.llm.ollama.embedding import OllamaEmbedding
 from graphrag.query.llm.oai.typing import OpenaiApiType
+from graphrag.query.llm.ollama.typing import OllamaApiType
 from graphrag.query.structured_search.global_search.community_context import (
     GlobalCommunityContext,
 )

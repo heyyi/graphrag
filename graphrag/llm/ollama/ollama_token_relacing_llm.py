@@ -3,6 +3,8 @@
 
 """The Chat-based language model."""
 
+import logging
+
 from typing_extensions import Unpack
 
 from graphrag.llm.types import (
@@ -15,6 +17,9 @@ from graphrag.llm.types import (
 )
 
 from .utils import perform_variable_replacements
+
+
+log = logging.getLogger(__name__)
 
 
 class OllamaTokenReplacingLLM(LLM[CompletionInput, CompletionOutput]):
@@ -32,6 +37,8 @@ class OllamaTokenReplacingLLM(LLM[CompletionInput, CompletionOutput]):
     ) -> LLMOutput[CompletionOutput]:
         """Call the LLM with the input and kwargs."""
         variables = kwargs.get("variables")
+        log.info("variables: %s", variables)
         history = kwargs.get("history") or []
         input = perform_variable_replacements(input, history, variables)
+        log.info("replaced input: %s", input)
         return await self._delegate(input, **kwargs)

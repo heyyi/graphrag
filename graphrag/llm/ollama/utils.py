@@ -85,6 +85,8 @@ def perform_variable_replacements(
             for entry in variables:
                 result = result.replace(f"{{{entry}}}", variables[entry])
         return result
+    
+    result = replace_all(result)
     for i in range(len(history)):
         entry = history[i]
         if entry.get("role") == "system":

@@ -1,5 +1,5 @@
-# Copyright (c) 2024 Microsoft Corporation.
-# Licensed under the MIT License
+# Copyright (c) 2024 DELL Corporation.
+# Author yi.he@dell.com
 
 """OpenAI wrapper options."""
 
@@ -20,3 +20,4 @@ class OllamaApiType(str, Enum):
     """The Ollama Flavor."""
 
     Ollama = "ollama"
+

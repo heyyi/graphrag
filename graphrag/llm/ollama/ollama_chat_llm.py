@@ -5,6 +5,7 @@
 
 import logging
 from json import JSONDecodeError
+from typing import cast
 
 from typing_extensions import Unpack
 
@@ -47,7 +48,7 @@ class OllamaChatLLM(BaseLLM[CompletionInput, CompletionOutput]):
         args = get_completion_llm_args(
             kwargs.get("model_parameters"), self.configuration
         )
-        log.warning("kwargs: %s", kwargs)
+        log.info("kwargs: %s", kwargs)
         model = str(args.get("model"))
         history = kwargs.get("history") or []
         messages = [
@@ -58,9 +59,10 @@ class OllamaChatLLM(BaseLLM[CompletionInput, CompletionOutput]):
         completion = await self.client.chat(
             model=model,
             messages=messages,
+            format=args.get("format",""),
         )
         log.info("completion: %s", completion)
-        return completion.get("response")
+        return completion["message"]["content"]
 
     async def _invoke_json(
         self,
@@ -104,7 +106,7 @@ class OllamaChatLLM(BaseLLM[CompletionInput, CompletionOutput]):
                 **kwargs,
                 "model_parameters": {
                     **(kwargs.get("model_parameters") or {}),
-                    "response_format": {"type": "json_object"},
+                    "format": "json",
                 },
             },
         )

@@ -24,6 +24,7 @@ from graphrag.llm import (
     create_ollama_client,
     create_openai_completion_llm,
     create_openai_embedding_llm,
+    create_ollama_embedding_llm,
     create_tpm_rpm_limiters,
 )
 
@@ -193,6 +194,27 @@ def _load_openai_embeddings_llm(
     )
 
 
+def _load_ollama_embeddings_llm(
+    on_error: ErrorHandlerFn,
+    cache: LLMCache,
+    config: dict[str, Any],
+    azure=False,
+):
+    # TODO: Inject Cache
+    return _create_ollama_embeddings_llm(
+        OllamaConfiguration({
+            **_get_base_config(config),
+            "model": config.get(
+                "embeddings_model", config.get("model", "mxbai-embed-large")
+            ),
+            "deployment_name": config.get("deployment_name"),
+        }),
+        on_error,
+        cache,
+        azure,
+    )
+
+
 def _load_azure_openai_completion_llm(
     on_error: ErrorHandlerFn, cache: LLMCache, config: dict[str, Any]
 ):
@@ -267,6 +289,10 @@ loaders = {
         "load": _load_azure_openai_embeddings_llm,
         "chat": False,
     },
+    LLMType.OllamaEmbedding: {
+        "load": _load_ollama_embeddings_llm,
+        "chat": False,
+    },
     LLMType.StaticResponse: {
         "load": _load_static_response,
         "chat": False,
@@ -331,6 +357,22 @@ def _create_openai_embeddings_llm(
     return create_openai_embedding_llm(
         client, configuration, cache, limiter, semaphore, on_error=on_error
     )
+    
+
+def _create_ollama_embeddings_llm(
+    configuration: OllamaConfiguration,
+    on_error: ErrorHandlerFn,
+    cache: LLMCache,
+    azure=False,
+) -> EmbeddingLLM:
+    """Create an ollama embeddings llm."""
+    client = create_ollama_client(configuration=configuration)
+    limiter = _create_limiter(configuration)
+    semaphore = _create_semaphore(configuration)
+    return create_ollama_embedding_llm(
+        client, configuration, cache, limiter, semaphore, on_error=on_error
+    )
+    
 
 
 def _create_limiter(configuration: OpenAIConfiguration | OllamaConfiguration) -> LLMLimiter:
