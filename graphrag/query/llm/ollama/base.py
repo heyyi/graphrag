@@ -127,20 +127,12 @@ class OllamaLLMImpl(BaseOllamaLLM):
     def _create_ollama_client(self):
         """Create a new Ollama client instance."""
         sync_client = Client(
-            api_key=self.api_key,
-            base_url=self.api_base,
-            organization=self.organization,
-            # Retry Configuration
+            host=self.api_base,
             timeout=self.request_timeout,
-            max_retries=self.max_retries,
         )
         async_client = AsyncClient(
-            api_key=self.api_key,
-            base_url=self.api_base,
-            organization=self.organization,
-            # Retry Configuration
+            host=self.api_base,
             timeout=self.request_timeout,
-            max_retries=self.max_retries,
         )
         self.set_clients(sync_client=sync_client, async_client=async_client)
 

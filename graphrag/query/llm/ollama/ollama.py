@@ -1,5 +1,5 @@
-# Copyright (c) 2024 Microsoft Corporation.
-# Licensed under the MIT License
+# Copyright (c) 2024 DELL Corporation.
+# Author yi.he@dell.com
 
 """OpenAI Wrappers for Orchestration."""
 
@@ -16,17 +16,17 @@ from tenacity import (
 )
 
 from graphrag.query.llm.base import BaseLLMCallback
-from graphrag.query.llm.oai.base import OpenAILLMImpl
-from graphrag.query.llm.oai.typing import (
+from graphrag.query.llm.ollama.base import OllamaLLMImpl
+from graphrag.query.llm.ollama.typing import (
     OPENAI_RETRY_ERROR_TYPES,
-    OpenaiApiType,
+    OllamaApiType,
 )
 
 log = logging.getLogger(__name__)
 
 
-class OpenAI(OpenAILLMImpl):
-    """Wrapper for OpenAI Completion models."""
+class Ollama(OllamaLLMImpl):
+    """Wrapper for Ollama Completion models."""
 
     def __init__(
         self,
@@ -35,7 +35,7 @@ class OpenAI(OpenAILLMImpl):
         deployment_name: str | None = None,
         api_base: str | None = None,
         api_version: str | None = None,
-        api_type: OpenaiApiType = OpenaiApiType.OpenAI,
+        api_type: OllamaApiType = OllamaApiType.Ollama,
         organization: str | None = None,
         max_retries: int = 10,
         retry_error_types: tuple[type[BaseException]] = OPENAI_RETRY_ERROR_TYPES,  # type: ignore

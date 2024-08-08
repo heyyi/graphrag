@@ -174,15 +174,18 @@ class GlobalSearch(BaseSearch):
         search_prompt = ""
         try:
             search_prompt = self.map_system_prompt.format(context_data=context_data)
-            search_messages = [
-                {"role": "system", "content": search_prompt},
-                {"role": "user", "content": query},
-            ]
+            # search_messages = [
+            #     {"role": "system", "content": search_prompt},
+            #     {"role": "user", "content": query},
+            # ]
+            user_input = f"{search_prompt}The user's question is {query}"
+            search_messages = [ {"role": "user", "content": user_input}]
+            log.warning(f"search_messages:\n{search_messages}")
             async with self.semaphore:
                 search_response = await self.llm.agenerate(
                     messages=search_messages, streaming=False, **llm_kwargs
                 )
-                log.info("Map response: %s", search_response)
+                log.warning("Map response: %s", search_response)
             try:
                 # parse search response json
                 processed_response = self.parse_search_response(search_response)

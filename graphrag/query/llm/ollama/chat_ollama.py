@@ -113,7 +113,7 @@ class ChatOllama(BaseLLM, OllamaLLMImpl):
                         messages=messages,
                         streaming=streaming,
                         callbacks=callbacks,
-                        **kwargs,
+                        format=kwargs.get("format",""),
                     )
         except RetryError as e:
             self._reporter.error(f"Error at agenerate(): {e}")
@@ -175,7 +175,7 @@ class ChatOllama(BaseLLM, OllamaLLMImpl):
         response = await self.async_client.chat(  # type: ignore
             model=model,
             messages=messages,  # type: ignore
-            **kwargs,
+            format=kwargs.get("format",""),
         )
         # if streaming:
         #     full_response = ""

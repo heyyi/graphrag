@@ -35,7 +35,7 @@ from graphrag.query.structured_search.local_search.search import LocalSearch
 from graphrag.vector_stores import BaseVectorStore
 
 
-def get_llm(config: GraphRagConfig) -> ChatOpenAI:
+def get_llm(config: GraphRagConfig) -> ChatOpenAI | ChatOllama:
     """Get the LLM client."""
     is_azure_client = (
         config.llm.type == LLMType.AzureOpenAIChat
@@ -51,6 +51,24 @@ def get_llm(config: GraphRagConfig) -> ChatOpenAI:
     else:
         cognitive_services_endpoint = config.llm.cognitive_services_endpoint
     print(f"creating llm client with {llm_debug_info}")  # noqa T201
+    if config.llm.type == LLMType.OllamaChat:
+        return ChatOllama(
+        api_key=config.llm.api_key,
+        azure_ad_token_provider=(
+            get_bearer_token_provider(
+                DefaultAzureCredential(), cognitive_services_endpoint
+            )
+            if is_azure_client and not config.llm.api_key
+            else None
+        ),
+        api_base=config.llm.api_base,
+        organization=config.llm.organization,
+        model=config.llm.model,
+        api_type=OllamaApiType.Ollama,
+        deployment_name=config.llm.deployment_name,
+        api_version=config.llm.api_version,
+        max_retries=config.llm.max_retries,
+    )
     return ChatOpenAI(
         api_key=config.llm.api_key,
         azure_ad_token_provider=(
@@ -70,7 +88,7 @@ def get_llm(config: GraphRagConfig) -> ChatOpenAI:
     )
 
 
-def get_text_embedder(config: GraphRagConfig) -> OpenAIEmbedding:
+def get_text_embedder(config: GraphRagConfig) -> OpenAIEmbedding | OllamaEmbedding:
     """Get the LLM client for embeddings."""
     is_azure_client = config.embeddings.llm.type == LLMType.AzureOpenAIEmbedding
     debug_embedding_api_key = config.embeddings.llm.api_key or ""
@@ -83,6 +101,24 @@ def get_text_embedder(config: GraphRagConfig) -> OpenAIEmbedding:
     else:
         cognitive_services_endpoint = config.embeddings.llm.cognitive_services_endpoint
     print(f"creating embedding llm client with {llm_debug_info}")  # noqa T201
+    if config.embeddings.llm.type == LLMType.OllamaEmbedding:
+        return OllamaEmbedding(
+            api_key=config.embeddings.llm.api_key,
+            azure_ad_token_provider=(
+                get_bearer_token_provider(
+                    DefaultAzureCredential(), cognitive_services_endpoint
+                )
+                if is_azure_client and not config.embeddings.llm.api_key
+                else None
+            ),
+            api_base=config.embeddings.llm.api_base,
+            organization=config.llm.organization,
+            api_type=OllamaApiType.Ollama,
+            model=config.embeddings.llm.model,
+            deployment_name=config.embeddings.llm.deployment_name,
+            api_version=config.embeddings.llm.api_version,
+            max_retries=config.embeddings.llm.max_retries,
+        )
     return OpenAIEmbedding(
         api_key=config.embeddings.llm.api_key,
         azure_ad_token_provider=(

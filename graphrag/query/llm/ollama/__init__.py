@@ -7,7 +7,7 @@ from .base import BaseOllamaLLM, OllamaLLMImpl, OllamaTextEmbeddingImpl
 from .chat_ollama import ChatOllama
 from .embedding import OllamaEmbedding
 from .ollama import Ollama
-from .typing import OPENAI_RETRY_ERROR_TYPES, OpenaiApiType
+from .typing import OPENAI_RETRY_ERROR_TYPES, OllamaApiType
 
 __all__ = [
     "OPENAI_RETRY_ERROR_TYPES",
@@ -17,5 +17,5 @@ __all__ = [
     "OllamaEmbedding",
     "OllamaLLMImpl",
     "OllamaTextEmbeddingImpl",
-    "OpenaiApiType",
+    "OllamaApiType",
 ]

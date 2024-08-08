@@ -16,7 +16,8 @@ OPENAI_RETRY_ERROR_TYPES = (
 )
 
 
-class OllamaApiType(str, Enum):
-    """The Ollama Flavor."""
+class OpenaiApiType(str, Enum):
+    """The OpenAI Flavor."""
 
-    Ollama = "ollama"
+    OpenAI = "openai"
+    AzureOpenAI = "azure"
